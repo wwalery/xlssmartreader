@@ -1,4 +1,4 @@
-# xlssmartreader
+# XlsSmartReader
 
 Read XLS/XLSX files in a smart way. Use Apache POI for read XMS/XLSX and parse it by predefined template.
 Is used for complex Excel files, created from template.
