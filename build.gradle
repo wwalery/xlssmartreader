@@ -1,0 +1,135 @@
+plugins {
+  id "net.ltgt.errorprone" version "0.0.16"
+}
+
+apply plugin: 'maven'
+apply plugin: 'java'
+apply plugin: 'idea'
+
+idea.module.downloadJavadoc = true
+  
+//  apply plugin: "net.ltgt.errorprone"
+  
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+tasks.withType(JavaCompile) {
+  options.encoding = 'UTF-8'
+  options.compilerArgs << '-parameters' << "-Xlint:unchecked" << "-Xlint:deprecation"
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  errorprone 'com.google.errorprone:error_prone_core:latest.release'
+  
+  compile 'org.slf4j:slf4j-api:1.7.24'
+// https://mvnrepository.com/artifact/org.yaml/snakeyaml
+  compile group: 'org.yaml', name: 'snakeyaml', version: '1.21'
+// https://mvnrepository.com/artifact/org.apache.poi/poi
+  compile group: 'org.apache.poi', name: 'poi', version: '3.17'
+  compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.17'
+
+  testCompile 'org.hamcrest:hamcrest-all:latest.integration'
+//  testCompile 'org.testng:testng:latest.integration'
+  testCompile 'junit:junit:latest.integration'
+}
+
+
+sourceSets {
+  main {
+    java {
+      srcDirs 'src/main/java'
+    }
+  }
+  debug {
+    resources {
+      srcDir 'resources/install'
+    }
+   compileClasspath += sourceSets.main.runtimeClasspath
+  }
+  
+}
+
+def defaultManifest(def defaultTitle = null, def defaultVersion = null) {
+  ['Implementation-Title': defaultTitle != null ? defaultTitle : title,
+   'Implementation-Version': defaultVersion != null ? defaultVersion : version,
+   'Implementation-Time': new Date().format("yyyy-MM-dd HH:mm:ss"),
+   'Built-By': developer != null ? developer : System.getProperty('user.name'),
+   'Built-JDK': System.getProperty('java.version')
+  ]
+}
+
+test {
+    testLogging.showStandardStreams = true
+//    useTestNG {
+//      suites 'src/test/resources/testng.xml'
+//    }
+
+    def workDir = file(debugWorkingDir)
+    classpath += sourceSets.debug.resources
+    workingDir = workDir
+    
+  // listen to events in the test execution lifecycle
+    beforeTest { descriptor ->
+      logger.lifecycle("Running test: " + descriptor)
+    }
+
+  // listen to standard out and standard error of the test JVM(s)
+//    onOutput { descriptor, event ->
+//      logger.lifecycle(descriptor + ": " + event.message)
+//    }
+
+    testLogging {
+      events /*"passed", */ "skipped", "failed"
+      exceptionFormat = 'full'
+    }
+    afterSuite { desc, result ->
+      if (!desc.parent) { // will match the outermost suite
+        println "Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)"
+      }
+    }
+  }
+
+wrapper {
+   gradleVersion = '4.9'
+}
+
+
+task(debug, dependsOn: 'classes', type: JavaExec) {
+		def workDir = file(debugWorkingDir)
+    main = 'nurs.admin.Admin'
+    classpath = sourceSets.main.runtimeClasspath + sourceSets.debug.resources
+//    jvmArgs = ["-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"]    
+    debug true
+    workingDir = workDir
+}
+
+
+
+jar {
+  manifest.attributes.putAll(defaultManifest())
+  manifest.attributes.put('Main-Class', 'wwlib.xlssmartreader.CLI')
+}
+
+
+task copyProject(type: Copy) {
+  from "resources/install"
+  into "${rootDir}/build/libs"
+}
+
+task copyProjectTest(type: Copy) {
+  from "resources/test"
+  into "${rootDir}/build/libs/test"
+}
+
+task copyToLib(type: Copy) {
+  from configurations.runtime
+  into "${rootDir}/build/libs/lib"
+}
+
+build.finalizedBy(copyProject)  
+build.finalizedBy(copyProjectTest)  
+build.finalizedBy(copyToLib)  
+
