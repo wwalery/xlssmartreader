@@ -17,19 +17,19 @@ For work it is assumed that in result file has some gaps between constant text a
 This is the description, which described fields (colmns, rows) you need to read.
 
 ### Format
-`items` - first and mandatory element only<br/>
-  `item name` - item name, defined by you<br/>
-    `find` - string for search. Regexp.<br/>
-    `via` - direction for search. Possible values<br/>
-      `SELF` - values searched in the current cell. `find` must be regexp with one group<br/>
-      `ROW` - values searched in the current row (first not empty cell in all next columns)<br/>
-      `COLUMN` - values searched in the current column (first not empty cell in all next rows)<br/>
-      `BOTH` - values searched in the BOTH columns and rows (first not empty cell in all next rows and all columns - but in next columns for current row). Now used only for arrays<br/>
-    `isArray` - find list of items instead of one.<br/>
-    `until` - string for limiting search. Regexp. Previous searches work only to first occurence of this string. When not defined - to end of sheet.<br/>
-      `sub item name` - sub item name, defined by you, when upper `via` defined as `BOTH`. E.g. when you need to collect values from internal table.<br/>
-        `via` - direction for search. Possible values same as in `item` instead of `BOTH`<br/>
-        `find` - string for search column or row header. Regexp.<br/>
+* `items` - first and mandatory element only<br/>
+  * `item name` - item name, defined by you<br/>
+  * `find` - string for search. Regexp.<br/>
+  * `via` - direction for search. Possible values<br/>
+    * `SELF` - values searched in the current cell. `find` must be regexp with one group<br/>
+    * `ROW` - values searched in the current row (first not empty cell in all next columns)<br/>
+    * `COLUMN` - values searched in the current column (first not empty cell in all next rows)<br/>
+    * `BOTH` - values searched in the BOTH columns and rows (first not empty cell in all next rows and all columns - but in next   columns for current row). Now used only for arrays<br/>
+  * `isArray` - find list of items instead of one.<br/>
+  * `until` - string for limiting search. Regexp. Previous searches work only to first occurence of this string. When not defined - to end of sheet.<br/>
+    * `sub item name` - sub item name, defined by you, when upper `via` defined as `BOTH`. E.g. when you need to collect values from internal table.<br/>
+      * `via` - direction for search. Possible values same as in `item` instead of `BOTH`<br/>
+      * `find` - string for search column or row header. Regexp.<br/>
 
 ### Example
 ```YAML
