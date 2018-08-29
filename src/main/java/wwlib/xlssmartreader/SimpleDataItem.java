@@ -8,7 +8,6 @@ import java.util.List;
  */
 public class SimpleDataItem {
 
-  private String name;
   private Direction via;
   private String find;
   private List<String> values;
@@ -18,14 +17,6 @@ public class SimpleDataItem {
     
   }
   
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
   public Direction getVia() {
     return via;
   }
@@ -51,8 +42,7 @@ public class SimpleDataItem {
   }
 
   public String toSimpleString() {
-    return "name=" + name
-            + ", via=" + via
+    return "via=" + via
             + ", find=" + find
             + (values != null ? ", values=" + values : "");
 

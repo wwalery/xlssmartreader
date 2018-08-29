@@ -1,6 +1,7 @@
 package wwlib.xlssmartreader;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -11,17 +12,17 @@ public class DataItem extends SimpleDataItem {
   private boolean array;
   private String until;
   private String value;
-  private List<SimpleDataItem> items;
+  private Map<String, SimpleDataItem> items;
 
   public DataItem() {
     
   }
   
-  public List<SimpleDataItem> getItems() {
+  public Map<String, SimpleDataItem> getItems() {
     return items;
   }
 
-  public void setItems(List<SimpleDataItem> items) {
+  public void setItems(Map<String, SimpleDataItem> items) {
     this.items = items;
   }
 

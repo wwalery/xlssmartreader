@@ -24,7 +24,7 @@ repositories {
 dependencies {
   errorprone 'com.google.errorprone:error_prone_core:latest.release'
   
-  compile 'org.slf4j:slf4j-api:1.7.24'
+  compile 'org.slf4j:slf4j-api:1.7.25'
 // https://mvnrepository.com/artifact/org.yaml/snakeyaml
   compile group: 'org.yaml', name: 'snakeyaml', version: '1.21'
 // https://mvnrepository.com/artifact/org.apache.poi/poi
@@ -34,6 +34,8 @@ dependencies {
   testCompile 'org.hamcrest:hamcrest-all:latest.integration'
 //  testCompile 'org.testng:testng:latest.integration'
   testCompile 'junit:junit:latest.integration'
+// https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
+  testCompile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
 }
 
 
@@ -120,8 +122,8 @@ task copyProject(type: Copy) {
 }
 
 task copyProjectTest(type: Copy) {
-  from "resources/test"
-  into "${rootDir}/build/libs/test"
+  from "src/test/resources"
+  into "${rootDir}/build/libs"
 }
 
 task copyToLib(type: Copy) {

@@ -7,11 +7,13 @@ import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -32,9 +34,11 @@ public class XLSSmartReader {
 
   private RulesData rules;
 
+  private FormulaEvaluator evaluator;
+
   protected String getCellValue(Cell cell) {
     DataFormatter formatter = new DataFormatter();
-    return formatter.formatCellValue(cell);
+    return formatter.formatCellValue(cell, evaluator);
   }
 
   public RulesData getRules() {
@@ -44,6 +48,7 @@ public class XLSSmartReader {
   public void processXLS(String ruleFile, String xlsName) throws IOException, InvalidFormatException, IllegalAccessException {
     readRules(ruleFile);
     Workbook workbook = WorkbookFactory.create(new File(xlsName));
+    evaluator = workbook.getCreationHelper().createFormulaEvaluator();
     for (Sheet sheet : workbook) {
       processSheet(sheet);
     }
@@ -60,8 +65,8 @@ public class XLSSmartReader {
   }
 
   protected void processSheet(Sheet sheet) throws IllegalAccessException {
-    for (DataItem item : rules.getItems()) {
-      processItem(item, sheet, null);
+    for (Map.Entry<String, DataItem> entry : rules.getItems().entrySet()) {
+      processItem(entry.getKey(), entry.getValue(), sheet, null);
     }
   }
 
@@ -156,9 +161,9 @@ public class XLSSmartReader {
     item.setValues(values);
   }
 
-  protected void processItem(DataItem item, Sheet sheet, Cell beginFrom) {
+  protected void processItem(String itemName, DataItem item, Sheet sheet, Cell beginFrom) {
     if ((item.getFind() == null) || item.getFind().isEmpty()) {
-      LOG.error("Empty [find] field in item [{}]", item.getName());
+      LOG.error("Empty [find] field in item [{}]", itemName);
     }
     Cell startCell = findCell(sheet, beginFrom, item.getFind());
     if (startCell == null) {
@@ -195,18 +200,18 @@ public class XLSSmartReader {
         if (item.getItems() == null) {
           throw new IllegalArgumentException("Items must be defined for [" + item.getVia() + "] way");
         }
-        for (SimpleDataItem subItem : item.getItems()) {
+        for (Map.Entry<String, SimpleDataItem> entry : item.getItems().entrySet()) {
           Cell startArrayFrom;
-          if (subItem.getFind() == null) {
+          if (entry.getValue().getFind() == null) {
             startArrayFrom = startCell;
           } else {
-            startArrayFrom = findCell(sheet, startCell, subItem.getFind());
+            startArrayFrom = findCell(sheet, startCell, entry.getValue().getFind());
             if (startArrayFrom == null) {
-              throw new IllegalArgumentException("String [" + subItem.getFind() 
-                      + "] not found for subitem " + item.getName() + "->" + subItem.getName());
+              throw new IllegalArgumentException("String [" + entry.getValue().getFind()
+                      + "] not found for subitem " + itemName + "->" + entry.getKey());
             }
           }
-          processArrayItem(subItem, sheet, startArrayFrom);
+          processArrayItem(entry.getValue(), sheet, startArrayFrom);
         }
         break;
       default:

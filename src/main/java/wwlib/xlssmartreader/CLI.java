@@ -1,6 +1,7 @@
 package wwlib.xlssmartreader;
 
 import java.io.IOException;
+import java.util.Map;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 /**
@@ -10,8 +11,8 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
  */
 public class CLI {
 
-  private static void printValues(SimpleDataItem data, String ident) {
-    System.out.print(ident + data.getName() + " (" + data.getVia() + ") : ");
+  private static void printValues(String name, SimpleDataItem data, String ident) {
+    System.out.print(ident + name + " (" + data.getVia() + ") : ");
     if (data.getValues() != null) {
       for (String item : data.getValues()) {
         System.out.print(item + " | ");
@@ -27,18 +28,18 @@ public class CLI {
     }
     XLSSmartReader reader = new XLSSmartReader();
     reader.processXLS(args[0], args[1]);
-    for (DataItem data : reader.getRules().getItems()) {
-      if (data.isArray()) {
-        System.out.println(data.getName() + " : ");
-        if (data.getVia() == Direction.BOTH) {
-          for (SimpleDataItem item : data.getItems()) {
-            printValues(item, " ");
+    for (Map.Entry<String, DataItem> entry : reader.getRules().getItems().entrySet()) {
+      if (entry.getValue().isArray()) {
+        System.out.println(entry.getKey() + " : ");
+        if (entry.getValue().getVia() == Direction.BOTH) {
+          for (Map.Entry<String, SimpleDataItem> subEntry : entry.getValue().getItems().entrySet()) {
+            printValues(subEntry.getKey(), subEntry.getValue(), " ");
           }
         } else {
-          printValues(data, "");
+          printValues(entry.getKey(), entry.getValue(), "");
         }
       } else {
-        System.out.println(data.getName() + " : " + data.getValue());
+        System.out.println(entry.getKey() + " : " + entry.getValue().getValue());
       }
     }
 

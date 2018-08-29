@@ -1,0 +1,39 @@
+items:
+    edrpou:
+      find: Код за ЄДРПОУ/реєстраційний номер облікової картки платника податків(.*)
+      via: ROW
+    name:
+      find: Найменування / прізвище, ім'я, по батькові.*
+      via: COLUMN
+    address:
+      find: Місцезнаходження / місце проживання.*
+      via: COLUMN
+    SectionI:
+      isArray: true
+      find: І. Показники діяльності оператора, провайдера телекомунікацій
+      until: ІІ.  Загальні показники діяльності оператора, провайдера телекомунікацій
+      via: BOTH
+      items:
+        code:
+          find: ^А$
+          via: COLUMN
+        1:
+          find: ^1$
+          via: COLUMN
+        2:
+          find: ^2$
+          via: COLUMN
+        3:
+          find: ^3$
+          via: COLUMN
+    SectionII:
+      isArray: true
+      find: ІІ.  Загальні показники діяльності оператора, провайдера телекомунікацій
+      via: BOTH
+      items:
+        code:
+          find: ^А$
+          via: COLUMN
+        1:
+          find: ^1$
+          via: COLUMN

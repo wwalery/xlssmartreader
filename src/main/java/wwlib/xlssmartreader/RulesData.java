@@ -1,6 +1,6 @@
 package wwlib.xlssmartreader;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -8,18 +8,18 @@ import java.util.List;
  */
 public class RulesData {
 
-  private List<DataItem> items;
-  
+  private Map<String, DataItem> items;
+
   public RulesData() {
-    
+
   }
 
-  public List<DataItem> getItems() {
+  public Map<String, DataItem> getItems() {
     return items;
   }
 
-  public void setItems(List<DataItem> items) {
+  public void setItems(Map<String, DataItem> items) {
     this.items = items;
   }
-  
+
 }
