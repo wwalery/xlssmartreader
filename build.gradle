@@ -5,6 +5,7 @@ plugins {
 apply plugin: 'maven'
 apply plugin: 'java'
 apply plugin: 'idea'
+apply plugin: 'maven-publish'
 
 idea.module.downloadJavadoc = true
   
@@ -110,9 +111,21 @@ task(debug, dependsOn: 'classes', type: JavaExec) {
 
 
 
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java
+    }
+  }
+}
+
 jar {
   manifest.attributes.putAll(defaultManifest())
   manifest.attributes.put('Main-Class', 'wwlib.xlssmartreader.CLI')
+  into("META-INF/maven/$project.group/$project.name") {
+    from { generatePomFileForMavenJavaPublication }
+    rename ".*", "pom.xml"
+  }  
 }
 
 
