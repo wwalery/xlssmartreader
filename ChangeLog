@@ -2,7 +2,8 @@ XLSSmartReader Copyright (c) 2018
 
 2018-10-14 v0.2.0 Walery Wysotsky <dev@wysotsky.info>
 * Link dependent library via included pom.xml
-* Read file as stream
+* Read file from stream
+* Read rules from stream
 
 2018-08-19 v0.1.0 Walery Wysotsky <dev@wysotsky.info>
 * Initial version
