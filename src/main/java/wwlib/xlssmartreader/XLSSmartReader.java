@@ -46,19 +46,32 @@ public class XLSSmartReader {
   }
 
   public void processXLS(String ruleFile, String xlsName) throws IOException, InvalidFormatException, IllegalAccessException {
+    try (InputStream dataStream = Files.newInputStream(new File(xlsName).toPath(), StandardOpenOption.READ);
+            InputStream ruleStream = Files.newInputStream(new File(ruleFile).toPath(), StandardOpenOption.READ)) {
+      processXLS(ruleStream, dataStream);
+    } catch (Exception ex) {
+      throw ex;
+    }
+  }
+
+  public void processXLS(InputStream ruleFile, InputStream xls) throws IOException, InvalidFormatException, IllegalAccessException {
     readRules(ruleFile);
-    Workbook workbook = WorkbookFactory.create(new File(xlsName));
+    Workbook workbook = WorkbookFactory.create(xls);
     evaluator = workbook.getCreationHelper().createFormulaEvaluator();
     for (Sheet sheet : workbook) {
       processSheet(sheet);
     }
   }
 
-  protected void readRules(String ruleFile) {
+  protected void readRules(InputStream ruleStream) {
     Yaml yaml = new Yaml();
-    try (InputStream stream = Files.newInputStream(new File(ruleFile).toPath(), StandardOpenOption.READ)) {
 //      System.out.println(yaml.load(stream).toString());
-      rules = yaml.loadAs(stream, RulesData.class);
+    rules = yaml.loadAs(ruleStream, RulesData.class);
+  }
+
+  protected void readRules(String ruleFile) {
+    try (InputStream stream = Files.newInputStream(new File(ruleFile).toPath(), StandardOpenOption.READ)) {
+      readRules(stream);
     } catch (IOException ex) {
       LOG.error(String.format("Error on read file [%s]", ruleFile), ex);
     }
@@ -195,7 +208,8 @@ public class XLSSmartReader {
         break;
       case BOTH:
         if (!item.isArray()) {
-          throw new IllegalArgumentException("Via [" + item.getVia() + "] must be used only for arrays");
+          throw new IllegalArgumentException("Via [" + item.getVia()
+                  + "] must be used only for arrays");
         }
         if (item.getItems() == null) {
           throw new IllegalArgumentException("Items must be defined for [" + item.getVia() + "] way");
