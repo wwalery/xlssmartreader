@@ -46,8 +46,8 @@ public class XLSSmartReaderTest {
     assertEquals(4, result.getItems().get("SectionI").getItems().size());
     assertTrue(result.getItems().get("SectionI").getItems().containsKey("code"));
     assertEquals(49, result.getItems().get("SectionI").getItems().get("code").getValues().size());
-    assertEquals("151", result.getItems().get("SectionI").getItems().get("1").getValues().get(1));
-    assertEquals("0.03", result.getItems().get("SectionII").getItems().get("1").getValues().get(2));
+    assertEquals(151, result.getItems().get("SectionI").getItems().get("1").getValues().get(1).getCell().getNumericCellValue(), 0);
+    assertEquals(0.03, result.getItems().get("SectionII").getItems().get("1").getValues().get(2).getCell().getNumericCellValue(), 0);
   }
 
   @Test
@@ -59,8 +59,8 @@ public class XLSSmartReaderTest {
     assertEquals(4, result.getItems().get("SectionI").getItems().size());
     assertTrue(result.getItems().get("SectionI").getItems().containsKey("code"));
     assertEquals(49, result.getItems().get("SectionI").getItems().get("code").getValues().size());
-    assertEquals("-", result.getItems().get("SectionI").getItems().get("1").getValues().get(1));
-    assertEquals("3.5", result.getItems().get("SectionII").getItems().get("1").getValues().get(2));
+    assertEquals("-", result.getItems().get("SectionI").getItems().get("1").getValues().get(1).getStringValue());
+    assertEquals(3.5, result.getItems().get("SectionII").getItems().get("1").getValues().get(2).getCell().getNumericCellValue(), 0);
   }
 
   @Test
@@ -74,8 +74,8 @@ public class XLSSmartReaderTest {
     assertEquals(4, result.getItems().get("SectionI").getItems().size());
     assertTrue(result.getItems().get("SectionI").getItems().containsKey("code"));
     assertEquals(49, result.getItems().get("SectionI").getItems().get("code").getValues().size());
-    assertEquals("0.00", result.getItems().get("SectionI").getItems().get("1").getValues().get(1));
-    assertEquals("4.8", result.getItems().get("SectionII").getItems().get("1").getValues().get(2));
+    assertEquals(0, result.getItems().get("SectionI").getItems().get("1").getValues().get(1).getCell().getNumericCellValue(), 0);
+    assertEquals(4.838, result.getItems().get("SectionII").getItems().get("1").getValues().get(2).getCell().getNumericCellValue(), 0);
   }
   
   

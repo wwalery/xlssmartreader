@@ -146,7 +146,7 @@ public class XLSSmartReader {
   }
 
   protected void processArrayItem(SimpleDataItem item, Sheet sheet, Cell beginFrom) {
-    List<String> values = new ArrayList<>();
+    List<ValueItem> values = new ArrayList<>();
     switch (item.getVia()) {
       case COLUMN:
         for (int i = beginFrom.getRowIndex() + 1; i <= sheet.getLastRowNum(); i++) {
@@ -155,7 +155,7 @@ public class XLSSmartReader {
           if ((value == null) || value.isEmpty()) {
             break;
           }
-          values.add(getCellValue(curCell));
+          values.add(new ValueItem(value, curCell));
         }
         break;
       case ROW:
@@ -165,7 +165,7 @@ public class XLSSmartReader {
           if ((value == null) || value.isEmpty()) {
             break;
           }
-          values.add(getCellValue(curCell));
+          values.add(new ValueItem(value, curCell));
         }
         break;
       default:
@@ -190,20 +190,22 @@ public class XLSSmartReader {
       case SELF:
         Pattern fromPattern = Pattern.compile(item.getFind());
         Matcher matcher = fromPattern.matcher(getCellValue(startCell));
-        item.setValue(matcher.group(1));
+        item.setValue(new ValueItem(matcher.group(1), null));
         break;
       case COLUMN:
         if (item.isArray()) {
           throw new IllegalArgumentException("Via [" + item.getVia() + "] for array not implemented");
         } else {
-          item.setValue(getCellValue(findInColumn(startCell, stopCell)));
+          Cell cell = findInColumn(startCell, stopCell);
+          item.setValue(new ValueItem(getCellValue(cell), cell));
         }
         break;
       case ROW:
         if (item.isArray()) {
           throw new IllegalArgumentException("Via [" + item.getVia() + "] for array not implemented");
         } else {
-          item.setValue(getCellValue(findInRow(startCell, stopCell)));
+          Cell cell = findInRow(startCell, stopCell);
+          item.setValue(new ValueItem(getCellValue(cell), cell));
         }
         break;
       case BOTH:

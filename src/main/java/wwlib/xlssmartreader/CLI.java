@@ -14,8 +14,8 @@ public class CLI {
   private static void printValues(String name, SimpleDataItem data, String ident) {
     System.out.print(ident + name + " (" + data.getVia() + ") : ");
     if (data.getValues() != null) {
-      for (String item : data.getValues()) {
-        System.out.print(item + " | ");
+      for (ValueItem item : data.getValues()) {
+        System.out.print(item.getStringValue() + " | ");
       }
     }
     System.out.println();

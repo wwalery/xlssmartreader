@@ -1,6 +1,7 @@
 package wwlib.xlssmartreader;
 
 import java.util.List;
+import org.apache.poi.ss.usermodel.Cell;
 
 /**
  *
@@ -10,7 +11,7 @@ public class SimpleDataItem {
 
   private Direction via;
   private String find;
-  private List<String> values;
+  private List<ValueItem> values;
 
   
   public SimpleDataItem() {
@@ -33,11 +34,11 @@ public class SimpleDataItem {
     this.find = find;
   }
 
-  public List<String> getValues() {
+  public List<ValueItem> getValues() {
     return values;
   }
 
-  public void setValues(List<String> values) {
+  public void setValues(List<ValueItem> values) {
     this.values = values;
   }
 

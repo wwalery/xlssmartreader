@@ -1,7 +1,7 @@
 package wwlib.xlssmartreader;
 
-import java.util.List;
 import java.util.Map;
+import org.apache.poi.ss.usermodel.Cell;
 
 /**
  *
@@ -11,7 +11,7 @@ public class DataItem extends SimpleDataItem {
 
   private boolean array;
   private String until;
-  private String value;
+  private ValueItem value;
   private Map<String, SimpleDataItem> items;
 
   public DataItem() {
@@ -28,10 +28,14 @@ public class DataItem extends SimpleDataItem {
 
   
   public String getValue() {
-    return value;
+    return value != null ? value.getStringValue() : null;
   }
 
- public void setValue(String value) {
+  public Cell getCell() {
+    return value != null ? value.getCell() : null;
+  }
+  
+ public void setValue(ValueItem value) {
     this.value = value;
   }
 
@@ -57,6 +61,7 @@ public class DataItem extends SimpleDataItem {
             + toSimpleString()
             + ", array=" + array 
             + ", until=" + until
+            + ", value=" + value
             + (items != null ? "subItems=" + items : "")
             + '}';
   }

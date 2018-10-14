@@ -84,6 +84,9 @@ After read all readed data found in rules data:<br/>
 ```java
 reader.getRules().getItems().get('tax_code').getValue()
 ```
+```java
+reader.getRules().getItems().get('tax_code').getCell()
+```
 or as array:<br/>
 ```java
 reader.getRules.getItems().get('Section1').getItems().get('1').getValues()

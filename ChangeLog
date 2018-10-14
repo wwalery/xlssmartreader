@@ -4,6 +4,7 @@ XLSSmartReader Copyright (c) 2018
 * Link dependent library via included pom.xml
 * Read file from stream
 * Read rules from stream
+* Return POI Cell in additional to cell string value
 
 2018-08-19 v0.1.0 Walery Wysotsky <dev@wysotsky.info>
 * Initial version
