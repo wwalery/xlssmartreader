@@ -12,12 +12,21 @@ public class DataItem extends SimpleDataItem {
   private boolean array;
   private String until;
   private ValueItem value;
+  private boolean found;
   private Map<String, SimpleDataItem> items;
 
   public DataItem() {
-    
+
   }
-  
+
+  public boolean isFound() {
+    return found;
+  }
+
+  public void setFound(boolean found) {
+    this.found = found;
+  }
+
   public Map<String, SimpleDataItem> getItems() {
     return items;
   }
@@ -26,7 +35,6 @@ public class DataItem extends SimpleDataItem {
     this.items = items;
   }
 
-  
   public String getValue() {
     return value != null ? value.getStringValue() : null;
   }
@@ -34,8 +42,9 @@ public class DataItem extends SimpleDataItem {
   public Cell getCell() {
     return value != null ? value.getCell() : null;
   }
-  
- public void setValue(ValueItem value) {
+
+  public void setValue(ValueItem value) {
+    this.found = true;
     this.value = value;
   }
 
@@ -59,8 +68,9 @@ public class DataItem extends SimpleDataItem {
   public String toString() {
     return "DataItem{"
             + toSimpleString()
-            + ", array=" + array 
+            + ", array=" + array
             + ", until=" + until
+            + ", found=" + found
             + ", value=" + value
             + (items != null ? "subItems=" + items : "")
             + '}';

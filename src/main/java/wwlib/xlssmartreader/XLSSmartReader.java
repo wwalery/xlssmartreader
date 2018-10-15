@@ -79,7 +79,9 @@ public class XLSSmartReader {
 
   protected void processSheet(Sheet sheet) throws IllegalAccessException {
     for (Map.Entry<String, DataItem> entry : rules.getItems().entrySet()) {
-      processItem(entry.getKey(), entry.getValue(), sheet, null);
+      if (!entry.getValue().isFound()) {
+        processItem(entry.getKey(), entry.getValue(), sheet, null);
+      }
     }
   }
 
@@ -229,6 +231,7 @@ public class XLSSmartReader {
           }
           processArrayItem(entry.getValue(), sheet, startArrayFrom);
         }
+        item.setFound(true);
         break;
       default:
         throw new IllegalArgumentException("Illegal item 'via' value: [" + item.getVia() + "]");
