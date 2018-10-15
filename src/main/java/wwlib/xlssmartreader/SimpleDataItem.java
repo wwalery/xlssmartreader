@@ -12,6 +12,7 @@ public class SimpleDataItem {
   private Direction via;
   private String find;
   private List<ValueItem> values;
+  
 
   
   public SimpleDataItem() {
@@ -54,4 +55,20 @@ public class SimpleDataItem {
     return "SimpleDataItem{" + toSimpleString() + "}";
   }
 
+  public int findValue(String stringValue) {
+    if (values == null) {
+      return -1;
+    }
+    for (int i = 0; i < values.size(); i++) {
+      ValueItem item = values.get(i);
+      if (item == null) {
+        continue;
+      }
+      if (stringValue.equals(item.getStringValue())) {
+        return i;
+      }
+    }
+    return -1;
+  }
+  
 }

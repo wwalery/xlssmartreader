@@ -13,6 +13,7 @@ public class XLSSmartReaderTest {
   private final static String XLS1_NAME = "test1.xls";
   private final static String XLS2_NAME = "test2.xls";
   private final static String XLS3_NAME = "test3.xls";
+//  private final static String XLS4_NAME = "test4.xls";
 
   /**
    * Test of getRules method, of class XLSSmartReader.
@@ -78,6 +79,13 @@ public class XLSSmartReaderTest {
     assertEquals(4.838, result.getItems().get("SectionII").getItems().get("1").getValues().get(2).getCell().getNumericCellValue(), 0);
   }
   
+//  @Test
+//  public void testProcessXLS_4() throws Exception {
+//    XLSSmartReader instance = new XLSSmartReader();
+//    instance.processXLS(RULE_FILE, XLS4_NAME);
+//    RulesData result = instance.getRules();
+//    assertEquals("34430590", result.getItems().get("edrpou").getValue());
+//  }
   
   
 }
